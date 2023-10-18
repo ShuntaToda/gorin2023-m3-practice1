@@ -3,12 +3,11 @@ import { logout } from "../api/auth";
 
 export const Logout = ({ setIsLogin }) => {
   const handleLogout = async () => {
-    const data = logout();
+    const data = await logout();
 
     setIsLogin(false);
     localStorage.removeItem("token");
     localStorage.removeItem("username");
-    console.log(data);
   };
   return (
     <div>

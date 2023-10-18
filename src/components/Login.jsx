@@ -17,6 +17,7 @@ export const Login = ({ setIsLogin }) => {
       setMessage(data.message);
     }
   };
+
   return (
     <div className="mt-5 d-flex content-items-center justify-content-center">
       <div className="border rounded shadow d-flex flex-column p-3" style={{ width: "400px" }}>
