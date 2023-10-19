@@ -2,18 +2,22 @@ import { path } from "./path";
 
 export const loginApi = async (username, password) => {
   if (!checkToken()) {
-    const res = await fetch(`${path}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({ username: username, password: password }),
-    });
+    try {
+      const res = await fetch(`${path}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ username: username, password: password }),
+      });
 
-    const data = await res.json();
-    console.log(data);
-    return data;
+      const data = await res.json();
+      console.log(data);
+      return data;
+    } catch (e) {
+      console.error(e);
+    }
   }
   console.log("token nothing");
 };
@@ -21,18 +25,22 @@ export const loginApi = async (username, password) => {
 export const logout = async () => {
   console.log(localStorage.getItem("token"));
   if (checkToken()) {
-    const res = await fetch(`${path}/auth/logout`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+    try {
+      const res = await fetch(`${path}/auth/logout`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
-    const data = await res.json();
-    console.log(data);
-    return data;
+      const data = await res.json();
+      console.log(data);
+      return data;
+    } catch (e) {
+      console.error(e);
+    }
   }
 };
 
