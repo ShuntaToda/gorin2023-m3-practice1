@@ -1,5 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Field } from "./Field";
 
 export const Main = () => {
-  return <div>Main</div>;
+  return (
+    <div>
+      <Field />
+    </div>
+  );
 };
