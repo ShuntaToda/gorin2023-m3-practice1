@@ -4,28 +4,38 @@ import { Wall } from "./fieldItem/Wall";
 import { Player } from "./fieldItem/Player";
 import { Block } from "./fieldItem/Block";
 import { Goal } from "./fieldItem/Goal";
+import { handleDownMove, handleLeftMove, handleRightMove, handleUpMove } from "../feature/handleMove";
+import { getPlayerPosition } from "../feature/getPlayerPosition";
+import { checkGoal } from "../feature/checkGoal";
 
-export const Field = () => {
-  const [field, setField] = useState([]);
-  let gridColumnNum = 0;
+export const Field = ({ field, setField, addMove, setIsGoal }) => {
+  const handleKeyDown = (e) => {
+    if (e.key == "ArrowRight") {
+      handleRightMove(field, setField, addMove);
+    } else if (e.key == "ArrowLeft") {
+      handleLeftMove(field, setField, addMove);
+    } else if (e.key == "ArrowUp") {
+      handleUpMove(field, setField, addMove);
+    } else if (e.key == "ArrowDown") {
+      handleDownMove(field, setField, addMove);
+    }
+  };
+
   useEffect(() => {
-    const handleSetField = async () => {
-      const data = await fieldAPI();
-      const gotField = data.objects;
-      setField(gotField);
-      console.log(gotField[0].length);
-      gridColumnNum = gotField[0].length;
-    };
-    handleSetField();
-  }, []);
+    if (field[0] && checkGoal(field)) {
+      setIsGoal(true);
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [field]);
 
   return (
     <div>
       <div
         className="d-grid justify-content-center"
         style={{
-          gridTemplateColumns: field[0] ? `repeat(${field[0].length}, 100px)` : "",
-          gridAutoRows: "100px",
+          gridTemplateColumns: field[0] ? `repeat(${field[0].length}, 75px)` : "",
+          gridAutoRows: "75px",
         }}
       >
         {field.map((row, rowIndex) => {

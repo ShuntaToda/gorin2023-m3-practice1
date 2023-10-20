@@ -10,9 +10,11 @@ function App() {
   const [isLogin, setIsLogin] = useState(checkToken());
   return (
     <div className="App mt-5 container text-start">
-      <h1>M3 Frontend</h1>
+      <div className="d-flex justify-content-between">
+        <h1>M3 Frontend</h1>
+        {isLogin && <Logout setIsLogin={setIsLogin}></Logout>}
+      </div>
       {!isLogin ? <Login setIsLogin={setIsLogin}></Login> : <Main></Main>}
-      {isLogin && <Logout setIsLogin={setIsLogin}></Logout>}
     </div>
   );
 }
