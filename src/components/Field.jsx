@@ -5,25 +5,35 @@ import { Player } from "./fieldItem/Player";
 import { Block } from "./fieldItem/Block";
 import { Goal } from "./fieldItem/Goal";
 import { handleDownMove, handleLeftMove, handleRightMove, handleUpMove } from "../feature/handleMove";
-import { getPlayerPosition } from "../feature/getPlayerPosition";
 import { checkGoal } from "../feature/checkGoal";
 
-export const Field = ({ field, setField, addMove, setIsGoal }) => {
+export const Field = ({ field, setField, addMove, setIsStart, storeLocalStrage, handleGoal }) => {
+  const [isKeyDown, setIsKeyDown] = useState(false);
   const handleKeyDown = (e) => {
     if (e.key == "ArrowRight") {
+      setIsKeyDown(true);
       handleRightMove(field, setField, addMove);
     } else if (e.key == "ArrowLeft") {
+      setIsKeyDown(true);
       handleLeftMove(field, setField, addMove);
     } else if (e.key == "ArrowUp") {
+      setIsKeyDown(true);
       handleUpMove(field, setField, addMove);
     } else if (e.key == "ArrowDown") {
+      setIsKeyDown(true);
       handleDownMove(field, setField, addMove);
     }
   };
 
   useEffect(() => {
     if (field[0] && checkGoal(field)) {
-      setIsGoal(true);
+      console.log("goal");
+      setIsStart(false);
+      handleGoal();
+    }
+    if (isKeyDown) {
+      storeLocalStrage();
+      setIsKeyDown(false);
     }
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
