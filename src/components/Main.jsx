@@ -3,12 +3,16 @@ import { Field } from "./Field";
 import { fieldAPI } from "../api/field";
 import { ResultTable } from "./ResultTable";
 import { storeResultAPI } from "../api/results";
+import { useLocalStorage } from "../hooks/useLocalStorage"; // カスタムフックのインポート
 
 export const Main = () => {
   const [isStart, setIsStart] = useState(false);
   const [field, setField] = useState([]);
   const [blockMove, setBlockMove] = useState(0);
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useLocalStorage("time", 0); // カスタムフックを使用
+  const [localField, setLocalField] = useLocalStorage("field", null); // カスタムフックを使用
+  const [localBlockMove, setLocalBlockMove] = useLocalStorage("blockMove", null); // カスタムフックを使用
+
 
   const handleSetField = async () => {
     const data = await fieldAPI();
@@ -17,15 +21,14 @@ export const Main = () => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("field") && localStorage.getItem("time") && localStorage.getItem("blockMove")) {
-      setField(JSON.parse(localStorage.getItem("field")));
-      setTime(Number(localStorage.getItem("time")));
-      setBlockMove(Number(localStorage.getItem("blockMove")));
+    if (localField && localBlockMove != null) {
+      setField(localField);
+      setBlockMove(localBlockMove);
       setIsStart(true);
     } else {
       handleSetField();
     }
-  }, []);
+  }, [localField, localBlockMove]);
 
   useEffect(() => {
     let interval;
@@ -41,7 +44,7 @@ export const Main = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [isStart]);
+  }, [isStart,setTime]);
 
   const addMove = () => {
     setBlockMove(blockMove + 1);
@@ -53,20 +56,19 @@ export const Main = () => {
   };
 
   const storeLocalStrage = () => {
-    localStorage.setItem("field", JSON.stringify(field));
-    localStorage.setItem("time", time);
-    localStorage.setItem("blockMove", blockMove);
+    setLocalField(field);
+    setLocalBlockMove(blockMove);
   };
 
   const handleGoal = () => {
-    localStorage.removeItem("field");
-    localStorage.removeItem("time");
-    localStorage.removeItem("blockMove");
+    setLocalField(null);
+    setLocalBlockMove(null);
     setField([]);
     setTime(0);
     setBlockMove(0);
     storeResult();
   };
+  
   return (
     <div>
       <div className="fs-1 mt-4">
