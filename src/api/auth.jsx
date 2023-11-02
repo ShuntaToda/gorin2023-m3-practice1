@@ -63,3 +63,8 @@ export const logout = async () => {
 export const checkToken = () => {
   return !!localStorage.getItem("token");
 };
+
+export const clearUserData = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("username");
+};
