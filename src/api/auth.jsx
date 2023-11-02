@@ -1,52 +1,70 @@
 import { path } from "./path";
 
 export const loginApi = async (username, password) => {
-  if (!checkToken()) {
-    try {
-      const res = await fetch(`${path}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({ username: username, password: password }),
-      });
-
-      const data = await res.json();
-      console.log(data);
-      return data;
-    } catch (e) {
-      console.error(e);
-    }
+  if (checkToken()) {
+    console.error("Already logged in");
+    return;
   }
-  console.log("token nothing");
+
+  try {
+    const res = await fetch(`${path}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (!res.ok) {
+      console.error(`HTTP error! status: ${res.status}`);
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (e) {
+    console.error(e);
+    throw e; 
+  }
 };
 
 export const logout = async () => {
-  console.log(localStorage.getItem("token"));
-  if (checkToken()) {
-    try {
-      const res = await fetch(`${path}/auth/logout`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+  if (!checkToken()) {
+    console.error("Not logged in");
+    return;
+  }
 
-      const data = await res.json();
-      console.log(data);
-      return data;
-    } catch (e) {
-      console.error(e);
+  try {
+    const res = await fetch(`${path}/auth/logout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    if (!res.ok) {
+      console.error(`HTTP error! status: ${res.status}`);
+      throw new Error(`HTTP error! status: ${res.status}`);
     }
+
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (e) {
+    console.error(e);
+    throw e;
   }
 };
 
 export const checkToken = () => {
-  if (localStorage.getItem("token")) {
-    return true;
-  }
-  return false;
+  return !!localStorage.getItem("token");
+};
+
+export const clearUserData = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("username");
 };

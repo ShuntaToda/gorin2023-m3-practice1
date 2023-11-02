@@ -1,19 +1,21 @@
 import React from "react";
-import { logout } from "../api/auth";
+import { logout, clearUserData } from "../api/auth";
 
 export const Logout = ({ setIsLogin }) => {
   const handleLogout = async () => {
-    const data = await logout();
-
-    setIsLogin(false);
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
+    try {
+      await logout();
+      clearUserData();
+      setIsLogin(false);
+    } catch (error) {
+      console.error("Logout failed", error);
+      alert("ログアウトに失敗しました。もう一度お試しください。");
+    }
   };
+
   return (
-    <div>
-      <div onClick={handleLogout} className="btn btn-outline-danger">
-        Logout
-      </div>
-    </div>
+    <button onClick={handleLogout} className="btn btn-outline-danger">
+      Logout
+    </button>
   );
 };

@@ -7,14 +7,14 @@ import { Login } from "./components/Login";
 import { Main } from "./components/Main";
 import { Logout } from "./components/Logout";
 function App() {
-  const [isLogin, setIsLogin] = useState(checkToken());
+  const [isLogin, setIsLogin] = useState(() => checkToken());
   return (
     <div className="App mt-5 container text-start">
       <div className="d-flex justify-content-between">
         <h1>M3 Frontend</h1>
-        {isLogin && <Logout setIsLogin={setIsLogin}></Logout>}
+        {isLogin && <Logout setIsLogin={setIsLogin} />}
       </div>
-      {!isLogin ? <Login setIsLogin={setIsLogin}></Login> : <Main></Main>}
+      {!isLogin ? <Login setIsLogin={setIsLogin} /> : <Main />}
     </div>
   );
 }

@@ -4,8 +4,8 @@ import { Wall } from "./fieldItem/Wall";
 import { Player } from "./fieldItem/Player";
 import { Block } from "./fieldItem/Block";
 import { Goal } from "./fieldItem/Goal";
-import { handleDownMove, handleLeftMove, handleRightMove, handleUpMove } from "../feature/handleMove";
-import { checkGoal } from "../feature/checkGoal";
+import { handleDownMove, handleLeftMove, handleRightMove, handleUpMove } from "../features/handleMove";
+import { checkGoal } from "../features/checkGoal";
 
 export const Field = ({ field, setField, addMove, setIsStart, storeLocalStrage, handleGoal }) => {
   const [isKeyDown, setIsKeyDown] = useState(false);
