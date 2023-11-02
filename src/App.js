@@ -7,7 +7,7 @@ import { Login } from "./components/Login";
 import { Main } from "./components/Main";
 import { Logout } from "./components/Logout";
 function App() {
-  const [isLogin, setIsLogin] = useState(checkToken());
+  const [isLogin, setIsLogin] = useState(() => checkToken());
   return (
     <div className="App mt-5 container text-start">
       <div className="d-flex justify-content-between">
